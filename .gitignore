@@ -1,0 +1,11 @@
+*~
+*.pyc
+*.pyo
+
+/lektorlib.egg-info
+/dist/
+/build/
+
+/.tox/
+/.coverage
+/htmlcov/
