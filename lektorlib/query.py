@@ -109,7 +109,7 @@ class PrecomputedQuery(Query):
 
     def get_order_by(self):
         # child_ids are already in default order, so unless an ordering
-        # is explicit applied, we do not need to sort the results
+        # is explicitly applied, we do not need to sort the results
         return self._order_by
 
     def __assert_is_not_attachment_query(self):
