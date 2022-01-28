@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import inspect
 import re
 
@@ -37,14 +35,14 @@ class PaginatedVirtualSource(DummyVirtualSource):
     virtual_path_prefix = 'paginated-virtual'
 
     def __init__(self, record, extra_path=None, page_num=None):
-        super(PaginatedVirtualSource, self).__init__(record, extra_path)
+        super().__init__(record, extra_path)
         self.page_num = page_num
 
     @property
     def path(self):
-        path = super(PaginatedVirtualSource, self).path
+        path = super().path
         if self.page_num is not None:
-            path += "/page={:d}".format(self.page_num)
+            path += f"/page={self.page_num:d}"
         return path
 
     @property
@@ -52,7 +50,7 @@ class PaginatedVirtualSource(DummyVirtualSource):
         return DummyPaginationController(self)
 
 
-class DummyPaginationController(object):
+class DummyPaginationController:
     def __init__(self, source):
         self.source = source
 
@@ -95,7 +93,7 @@ def dummy_plugin(lektor_env):
 
 
 @pytest.mark.usefixtures('dummy_plugin')
-class Test_get_source(object):
+class Test_get_source:
     @pytest.mark.parametrize("path", [
         "/",
         "/about",
@@ -140,7 +138,7 @@ class Test_get_source(object):
 
 
 @pytest.mark.usefixtures('dummy_plugin')
-class QueryTestBase(object):
+class QueryTestBase:
 
     @pytest.fixture
     def make_query(self, query_path, lektor_pad):
@@ -244,7 +242,7 @@ class TestVirtualSourceQuery(QueryTestBase):
 
     @pytest.fixture
     def query_path(self):
-        return '/projects@{}'.format(self.virtual_path_prefix)
+        return f'/projects@{self.virtual_path_prefix}'
 
     @pytest.fixture
     def child_ids(self):
@@ -252,8 +250,8 @@ class TestVirtualSourceQuery(QueryTestBase):
 
     def test_iter(self, query):
         assert [obj.path for obj in query] == [
-            '/projects@{}/a'.format(self.virtual_path_prefix),
-            '/projects@{}/b'.format(self.virtual_path_prefix),
+            f'/projects@{self.virtual_path_prefix}/a',
+            f'/projects@{self.virtual_path_prefix}/b',
             ]
 
     def test_get(self, query):

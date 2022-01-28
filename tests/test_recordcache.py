@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from lektor.sourceobj import VirtualSourceObject
@@ -7,7 +5,7 @@ from lektor.sourceobj import VirtualSourceObject
 from lektorlib.recordcache import get_or_create_virtual
 
 
-class Test_get_or_create_virtual(object):
+class Test_get_or_create_virtual:
     @pytest.fixture
     def record(self, lektor_pad):
         return lektor_pad.get('/about')
@@ -65,4 +63,4 @@ class DummyVirtualSource(VirtualSourceObject):
 
     @property
     def path(self):
-        return "{}@{}".format(self.record.path, self._virtual_path)
+        return f"{self.record.path}@{self._virtual_path}"

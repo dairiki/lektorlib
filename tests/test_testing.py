@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from lektor.context import get_ctx
@@ -8,7 +6,7 @@ from lektorlib.testing import assert_no_dependencies
 
 
 @pytest.mark.usefixtures('lektor_context')
-class Test_assert_no_deps(object):
+class Test_assert_no_deps:
 
     def test_dep(self):
         with pytest.raises(AssertionError):

@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 """Test helpers
 
 """
 from contextlib import contextmanager
 import re
-
-from six import string_types
 
 from lektor.context import get_ctx
 
@@ -14,7 +11,7 @@ from lektor.context import get_ctx
 def assert_no_dependencies(match=None):
     def check_dep(dep):
         if match is not None:
-            path = dep if isinstance(dep, string_types) else dep.path
+            path = dep if isinstance(dep, str) else dep.path
             if not re.search(match, path):
                 return
         assert False, "Unexpected dependency: %r" % dep

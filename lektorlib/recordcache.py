@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Helper for dealing with the Lektor record cache.
 
 Note that ``lektor.db.Pad.get`` normally handles caching for regular

@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
 """A Query-like object which can be used to access a precomputed
 sequence of sources.  This works for virtual sources, too.
 
 
 """
 from collections import OrderedDict
-
-import six
 
 from lektor.db import Query
 from lektor.environment import PRIMARY_ALT
@@ -67,7 +64,7 @@ class PrecomputedQuery(Query):
 
     """
     def __init__(self, path, pad, child_ids, alt=PRIMARY_ALT):
-        super(PrecomputedQuery, self).__init__(path, pad, alt=alt)
+        super().__init__(path, pad, alt=alt)
         # We really just want an ordered set, but we'll use an OrderedDict
         # to avoid requiring another library.
         self.__child_ids = OrderedDict((id_, None) for id_ in child_ids)
@@ -80,7 +77,7 @@ class PrecomputedQuery(Query):
         if page_num is Ellipsis:
             page_num = self._page_num
         return get_source(self.pad,
-                          path='%s/%s' % (self.path, id),
+                          path=f'{self.path}/{id}',
                           page_num=page_num, alt=self.alt, persist=persist)
 
     def _iterate(self):
@@ -100,7 +97,7 @@ class PrecomputedQuery(Query):
                         # Requested explicit page_num, but source does not
                         # support pagination.  Punt and skip it.
                         continue
-                path = '%s/%s' % (self.path, id)
+                path = f'{self.path}/{id}'
                 raise RuntimeError("could not load source for %r" % path)
 
             is_page = not getattr(record, 'is_attachment', False)
@@ -121,7 +118,7 @@ class PrecomputedQuery(Query):
         if self._pristine:
             # optimization
             return len(self.__child_ids)
-        return super(PrecomputedQuery, self).count()
+        return super().count()
 
     def get(self, id, page_num=Ellipsis):
         # optimization
@@ -132,7 +129,4 @@ class PrecomputedQuery(Query):
         if self._pristine:
             # optimization
             return len(self.__child_ids) > 0
-        return super(PrecomputedQuery, self).__bool__()
-
-    if six.PY2:                 # pragma: no cover
-        __nonzero__ = __bool__
+        return super().__bool__()

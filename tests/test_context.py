@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import pytest
 
 from lektor.context import (
@@ -13,7 +11,7 @@ from lektorlib.context import (
     )
 
 
-class Test_disable_dependency_recording(object):
+class Test_disable_dependency_recording:
 
     @pytest.mark.usefixtures('lektor_context')
     def test(self):
@@ -21,7 +19,7 @@ class Test_disable_dependency_recording(object):
         with disable_dependency_recording():
             get_ctx().record_dependency('b')
         get_ctx().record_dependency('c')
-        assert get_ctx().referenced_dependencies == set(['a', 'c'])
+        assert get_ctx().referenced_dependencies == {'a', 'c'}
 
     def test_no_context(self):
         assert get_ctx() is None
@@ -30,7 +28,7 @@ class Test_disable_dependency_recording(object):
         assert get_ctx() is None
 
 
-class TestDependencyIgnoringContextProxy(object):
+class TestDependencyIgnoringContextProxy:
     @pytest.fixture
     def proxy(self, lektor_context):
         return DependencyIgnoringContextProxy(lektor_context)
