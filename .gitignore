@@ -5,7 +5,9 @@
 /lektorlib.egg-info
 /dist/
 /build/
+/.eggs/
 
 /.tox/
 /.coverage
+/.coverage.*
 /htmlcov/
