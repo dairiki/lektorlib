@@ -22,7 +22,7 @@ the standard `lektor.db.Query` will not work.  This version will.
 Second, when we would like to generate a query of a pre-computed
 subset of a resource's children, this prevents intruducing
 unnecessary build dependencies.  If we used a standard query with
-a filter applied, still iterates of all of the parent nodes
+a filter applied, it still iterates over all of the parent node’s
 children, registering dependencies on all of them.
 
 ### `lektorlib.context.disable_dependency_recording`
@@ -35,8 +35,8 @@ dependency recording system.
 This function is a helper to streamline the caching of virtual
 source objects in the lektor record cache.
 
-`Lektor.db.Pad.get()` handles caching for regular records,
-at present, however, it does not appear that it ever caches
+`Lektor.db.Pad.get()` handles caching for regular records.
+At present, however, it does not appear that it ever caches
 virtual source objects, even though its record cache is perfectly
 capable of doing so.
 
