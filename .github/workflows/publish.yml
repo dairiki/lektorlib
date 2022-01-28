@@ -1,0 +1,38 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  # Paranoia - assert tests pass
+  run-tests:
+    uses: ./.github/workflows/tests.yml
+
+  publish:
+    needs:
+      - run-tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build setuptools_scm
+
+    - name: "Paranoia: Check tag"
+      run: |
+        version=$(python -m setuptools_scm)
+        if [ "$version" != "$(python -m setuptools_scm --strip-dev)" ]; then
+          echo "::error title=Missing Tag::Version ($version) does not appear to be properly tagged for setuptools_scm"
+          exit 78
+        else
+          echo "::notice title=Version::Version from tag: $version"
+        fi
+
+    - name: Build package
+      run: python -m build
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
