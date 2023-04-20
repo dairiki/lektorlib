@@ -52,6 +52,10 @@ class TestDependencyIgnoringContextProxy:
         proxy.record_dependency('b')
         assert proxy.referenced_dependencies == set('a')
 
+    def test_record_dependency_accepts_affects_url(self, proxy):
+        proxy.record_dependency('b', affects_url=True)
+        assert proxy.referenced_dependencies == set()
+
     def test_record_virtual_dependency(self, proxy, lektor_context,
                                        lektor_pad):
         proxy.record_virtual_dependency(lektor_pad.get('/projects@1'))

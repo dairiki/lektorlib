@@ -35,7 +35,7 @@ class DependencyIgnoringContextProxy(Context):
     def __getattr__(self, attr):
         return getattr(self._ctx, attr)
 
-    def record_dependency(self, filename):
+    def record_dependency(self, filename, affects_url=None):
         pass
 
     def record_virtual_dependency(self, virtual_source):
