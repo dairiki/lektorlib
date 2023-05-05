@@ -4,6 +4,7 @@
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/lektorlib.svg)](https://pypi.python.org/pypi/lektorlib/)
 [![GitHub license](https://img.shields.io/github/license/dairiki/lektorlib)](https://github.com/dairiki/lektorlib/blob/master/LICENSE)
 [![GitHub Actions (Tests)](https://github.com/dairiki/lektorlib/workflows/Tests/badge.svg)](https://github.com/dairiki/lektorlib)
+[![Trackgit Views](https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/lhaqecdxux7krt01vbsl)](https://trackgit.com)
 
 A few bits which may possibly be useful to developers of [Lektor][] plugins.
 
