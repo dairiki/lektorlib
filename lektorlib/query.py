@@ -30,7 +30,7 @@ def get_source(
     alt: str = PRIMARY_ALT,
     page_num: int | None = None,
     persist: bool = True,
-) -> Record | VirtualSourceObject:
+) -> Record | VirtualSourceObject | None:
     """Like Pad.get() but works for paginated virtual sources as well as
     concrete records.
 
@@ -107,7 +107,7 @@ class PrecomputedQuery(Query):  # type: ignore[misc]
         id: str,
         persist: bool = True,
         page_num: int | None | EllipsisType = Ellipsis,
-    ) -> Record | VirtualSourceObject:
+    ) -> Record | VirtualSourceObject | None:
         """Low level record access."""
         if id not in self.__child_ids:
             return None  # not in our query set
