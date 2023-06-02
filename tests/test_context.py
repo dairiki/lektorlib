@@ -1,25 +1,19 @@
 import pytest
+from lektor.context import Context
+from lektor.context import get_ctx
 
-from lektor.context import (
-    get_ctx,
-    Context,
-    )
-
-from lektorlib.context import (
-    disable_dependency_recording,
-    DependencyIgnoringContextProxy,
-    )
+from lektorlib.context import DependencyIgnoringContextProxy
+from lektorlib.context import disable_dependency_recording
 
 
 class Test_disable_dependency_recording:
-
-    @pytest.mark.usefixtures('lektor_context')
+    @pytest.mark.usefixtures("lektor_context")
     def test(self):
-        get_ctx().record_dependency('a')
+        get_ctx().record_dependency("a")
         with disable_dependency_recording():
-            get_ctx().record_dependency('b')
-        get_ctx().record_dependency('c')
-        assert get_ctx().referenced_dependencies == {'a', 'c'}
+            get_ctx().record_dependency("b")
+        get_ctx().record_dependency("c")
+        assert get_ctx().referenced_dependencies == {"a", "c"}
 
     def test_no_context(self):
         assert get_ctx() is None
@@ -44,21 +38,20 @@ class TestDependencyIgnoringContextProxy:
         assert isinstance(proxy, Context)
 
     def test_cache(self, proxy, lektor_context):
-        proxy.cache['test'] = 'value'
-        assert lektor_context.cache['test'] == 'value'
+        proxy.cache["test"] = "value"
+        assert lektor_context.cache["test"] == "value"
 
     def test_record_dependency(self, proxy, lektor_context):
-        lektor_context.record_dependency('a')
-        proxy.record_dependency('b')
-        assert proxy.referenced_dependencies == set('a')
+        lektor_context.record_dependency("a")
+        proxy.record_dependency("b")
+        assert proxy.referenced_dependencies == set("a")
 
     def test_record_dependency_accepts_affects_url(self, proxy):
-        proxy.record_dependency('b', affects_url=True)
+        proxy.record_dependency("b", affects_url=True)
         assert proxy.referenced_dependencies == set()
 
-    def test_record_virtual_dependency(self, proxy, lektor_context,
-                                       lektor_pad):
-        proxy.record_virtual_dependency(lektor_pad.get('/projects@1'))
+    def test_record_virtual_dependency(self, proxy, lektor_context, lektor_pad):
+        proxy.record_virtual_dependency(lektor_pad.get("/projects@1"))
         assert not proxy.referenced_virtual_dependencies
-        lektor_context.record_virtual_dependency(lektor_pad.get('/projects@2'))
+        lektor_context.record_virtual_dependency(lektor_pad.get("/projects@2"))
         assert proxy.referenced_virtual_dependencies

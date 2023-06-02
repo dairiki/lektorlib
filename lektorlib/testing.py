@@ -1,8 +1,8 @@
 """Test helpers
 
 """
-from contextlib import contextmanager
 import re
+from contextlib import contextmanager
 
 from lektor.context import get_ctx
 

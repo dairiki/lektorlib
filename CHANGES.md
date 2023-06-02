@@ -4,6 +4,7 @@
 
 - Use PDM instead of setuptools to build distribution
 - Configured pre-commit
+- Run black and reorder-python-imports on the code
 
 ### Release 1.1.0 (2023-04-20)
 

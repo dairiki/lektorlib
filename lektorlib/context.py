@@ -3,10 +3,8 @@
 """
 from contextlib import contextmanager
 
-from lektor.context import (
-    get_ctx,
-    Context,
-    )
+from lektor.context import Context
+from lektor.context import get_ctx
 
 
 @contextmanager
@@ -27,7 +25,7 @@ def disable_dependency_recording():
 
 
 class DependencyIgnoringContextProxy(Context):
-    __slots__ = ['_ctx']
+    __slots__ = ["_ctx"]
 
     def __init__(self, ctx):
         self._ctx = ctx

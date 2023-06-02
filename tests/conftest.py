@@ -1,7 +1,5 @@
 from pathlib import Path
 
-import pytest
-
 import lektor.builder
 import lektor.context
 import lektor.datamodel
@@ -9,11 +7,12 @@ import lektor.db
 import lektor.environment
 import lektor.pagination
 import lektor.project
+import pytest
 
 
 @pytest.fixture(scope="session")
 def site_path():
-    return Path(__file__).parent / 'test-site'
+    return Path(__file__).parent / "test-site"
 
 
 @pytest.fixture

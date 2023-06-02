@@ -29,7 +29,7 @@ def get_source(pad, path, alt=PRIMARY_ALT, page_num=None, persist=True):
     # NB: The user will have to ensure that pagination.for_page
     # is properly implemented for their virtual sources.
 
-    if page_num is None or '@' not in path:
+    if page_num is None or "@" not in path:
         return pad.get(path, alt=alt, page_num=page_num, persist=persist)
 
     source = pad.get(path, persist=persist, alt=alt)
@@ -63,6 +63,7 @@ class PrecomputedQuery(Query):
     children, registering dependencies on all of them.
 
     """
+
     def __init__(self, path, pad, child_ids, alt=PRIMARY_ALT):
         super().__init__(path, pad, alt=alt)
         # We really just want an ordered set, but we'll use an OrderedDict
@@ -73,12 +74,16 @@ class PrecomputedQuery(Query):
     def _get(self, id, persist=True, page_num=Ellipsis):
         """Low level record access."""
         if id not in self.__child_ids:
-            return None         # not in our query set
+            return None  # not in our query set
         if page_num is Ellipsis:
             page_num = self._page_num
-        return get_source(self.pad,
-                          path=f'{self.path}/{id}',
-                          page_num=page_num, alt=self.alt, persist=persist)
+        return get_source(
+            self.pad,
+            path=f"{self.path}/{id}",
+            page_num=page_num,
+            alt=self.alt,
+            persist=persist,
+        )
 
     def _iterate(self):
         self.__assert_is_not_attachment_query()
@@ -97,10 +102,10 @@ class PrecomputedQuery(Query):
                         # Requested explicit page_num, but source does not
                         # support pagination.  Punt and skip it.
                         continue
-                path = f'{self.path}/{id}'
+                path = f"{self.path}/{id}"
                 raise RuntimeError("could not load source for %r" % path)
 
-            is_page = not getattr(record, 'is_attachment', False)
+            is_page = not getattr(record, "is_attachment", False)
             if is_page and self._matches(record):
                 yield record
 
@@ -111,8 +116,7 @@ class PrecomputedQuery(Query):
 
     def __assert_is_not_attachment_query(self):
         if not self._include_pages or self._include_attachments:
-            raise AssertionError(
-                "Attachment queries are not currently supported")
+            raise AssertionError("Attachment queries are not currently supported")
 
     def count(self):
         if self._pristine:
