@@ -3,6 +3,7 @@
 ### Release 1.1.1 (unreleased)
 
 - Use PDM instead of setuptools to build distribution
+- Configured pre-commit
 
 ### Release 1.1.0 (2023-04-20)
 
