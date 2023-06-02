@@ -5,6 +5,7 @@
 #### Type Annotations
 
 - Narrow the return type of `lektorlib.recordcache.get_or_create_virtual`.
+- Convert `lektorlib.query.PrecomputedQuery` to a generic type.
 
 ### Release 1.2.0 (2023-06-02)
 

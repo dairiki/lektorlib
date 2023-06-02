@@ -8,9 +8,11 @@ from __future__ import annotations
 import sys
 from collections import OrderedDict
 from typing import Generator
+from typing import Generic
 from typing import Iterable
 from typing import Sequence
 from typing import TYPE_CHECKING
+from typing import TypeVar
 
 from lektor.db import Pad
 from lektor.db import Query
@@ -69,7 +71,10 @@ def get_source(
     return paginated_source
 
 
-class PrecomputedQuery(Query):  # type: ignore[misc]
+_DBSourceObject = TypeVar("_DBSourceObject", bound="Record | VirtualSourceObject")
+
+
+class PrecomputedQuery(Generic[_DBSourceObject], Query):  # type: ignore[misc]
     """This is a Query which yields a pre-computed sequence of children.
 
     This is useful in (at least) two circumstances:
@@ -107,7 +112,7 @@ class PrecomputedQuery(Query):  # type: ignore[misc]
         id: str,
         persist: bool = True,
         page_num: int | None | EllipsisType = Ellipsis,
-    ) -> Record | VirtualSourceObject | None:
+    ) -> _DBSourceObject | None:
         """Low level record access."""
         if id not in self.__child_ids:
             return None  # not in our query set
@@ -119,7 +124,7 @@ class PrecomputedQuery(Query):  # type: ignore[misc]
             persist=persist,
         )
 
-    def _iterate(self) -> Generator[Record | VirtualSourceObject, None, None]:
+    def _iterate(self) -> Generator[_DBSourceObject, None, None]:
         self.__assert_is_not_attachment_query()
         # note dependencies
         self_record = self.pad.get(self.path, alt=self.alt)
@@ -160,7 +165,7 @@ class PrecomputedQuery(Query):  # type: ignore[misc]
 
     def get(
         self, id: str, page_num: int | None | EllipsisType = Ellipsis
-    ) -> Record | VirtualSourceObject | None:
+    ) -> _DBSourceObject | None:
         # optimization
         if id in self.__child_ids:
             return self._get(id, page_num=page_num)
