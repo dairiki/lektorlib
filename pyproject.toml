@@ -63,4 +63,3 @@ test = [
 
 [tool.pdm.scripts]
 tests = "pytest --cov=lektorlib --cov-fail-under=100 tests"
-
