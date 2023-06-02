@@ -1,5 +1,9 @@
 ## Changelog
 
+### Release 1.1.1 (unreleased)
+
+- Use PDM instead of setuptools to build distribution
+
 ### Release 1.1.0 (2023-04-20)
 
 Fixes for Lektor 3.4 (in pre-release).

@@ -1,13 +1,9 @@
 *~
-*.pyc
-*.pyo
-
-/lektorlib.egg-info
-/dist/
-/build/
-/.eggs/
+__pycache__/
 
 /.tox/
 /.coverage
 /.coverage.*
 /htmlcov/
+
+/.pdm-python

@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools >= 61", "setuptools_scm[toml]>=6.2"]
-build-backend = "setuptools.build_meta"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
 
 [project]
 name = "lektorlib"
@@ -29,8 +29,38 @@ classifiers = [
 ]
 requires-python = ">=3.7"
 
-[tool.setuptools.dynamic]
-readme.file = ["README.md", "CHANGES.md"]
-readme.content-type = "text/markdown"
+[tool.pdm.version]
+source = "scm"
 
-[tool.setuptools_scm]
+
+[tool.pdm.build]
+excludes = [
+    "**/*~",
+    ".*",
+]
+source-includes = [
+    "CHANGES.md",
+    "README.md",
+    "tox.ini",
+    "tests/*.py",
+    "tests/test-site/*.lektorproject",
+    "tests/test-site/**/*.css",
+    "tests/test-site/**/*.html",
+    "tests/test-site/**/*.ini",
+    "tests/test-site/content/**/*.lr",
+]
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "flake8>=5.0.4",
+    "flake8-bugbear>=23.3.12",
+    "lektor",
+]
+test = [
+    "pytest>=7.3.1",
+    "pytest-cov",
+]
+
+[tool.pdm.scripts]
+tests = "pytest --cov=lektorlib --cov-fail-under=100 tests"
+
