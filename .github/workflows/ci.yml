@@ -1,14 +1,15 @@
-name: Tests
+name: CI
 
 on:
   push:
-    branches: ["*"]
+    branches: ['*']
+    tags: ['v[0-9]+.[0-9]+.[0-9]+*']
   pull_request:
-    branches: ["*"]
+    branches: ['master']
   workflow_call:
 
 jobs:
-  test:
+  tox-tests:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -31,7 +32,7 @@ jobs:
         retention-days: 1
 
   coverage:
-    needs: [test]
+    needs: [tox-tests]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -64,3 +65,19 @@ jobs:
     - uses: pdm-project/setup-pdm@v3
     - run: pdm install
     - run: pdm run mypy
+
+  publish-to-pypi:
+    needs: [tox-tests, coverage, pre-commit, mypy]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/lektorlib/
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: pdm-project/setup-pdm@v3
+      - run: pdm publish
