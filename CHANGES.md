@@ -1,9 +1,9 @@
 ## Changelog
 
-### Release 1.1.1 (unreleased)
+### Release 1.2.0 (2023-06-02)
 
-- Use PDM instead of setuptools to build distribution
 - Added type annotations
+- Use PDM instead of setuptools to build distribution
 - Configured pre-commit
 - Run black and reorder-python-imports on the code
 
