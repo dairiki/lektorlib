@@ -65,6 +65,10 @@ test = [
 [tool.pdm.scripts]
 tests = "pytest --cov=lektorlib --cov-fail-under=100 tests"
 
+[tool.coverage.run]
+source_pkgs = ["lektorlib"]
+parallel = true
+
 [tool.coverage.report]
 exclude_lines = [
     "pragma: no cover",
