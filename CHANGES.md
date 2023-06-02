@@ -1,5 +1,11 @@
 ## Changelog
 
+### Release 1.2.1 (unreleased)
+
+#### Type Annotations
+
+- Narrow the return type of `lektorlib.recordcache.get_or_create_virtual`.
+
 ### Release 1.2.0 (2023-06-02)
 
 - Added type annotations
