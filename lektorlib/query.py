@@ -3,13 +3,34 @@ sequence of sources.  This works for virtual sources, too.
 
 
 """
+from __future__ import annotations
+
+import sys
 from collections import OrderedDict
+from typing import Generator
+from typing import Iterable
+from typing import Sequence
+from typing import TYPE_CHECKING
 
+from lektor.db import Pad
 from lektor.db import Query
+from lektor.db import Record
 from lektor.environment import PRIMARY_ALT
+from lektor.sourceobj import VirtualSourceObject
+
+if sys.version_info >= (3, 10):
+    from types import EllipsisType
+elif TYPE_CHECKING:
+    from builtins import ellipsis as EllipsisType
 
 
-def get_source(pad, path, alt=PRIMARY_ALT, page_num=None, persist=True):
+def get_source(
+    pad: Pad,
+    path: str,
+    alt: str = PRIMARY_ALT,
+    page_num: int | None = None,
+    persist: bool = True,
+) -> Record | VirtualSourceObject:
     """Like Pad.get() but works for paginated virtual sources as well as
     concrete records.
 
@@ -48,7 +69,7 @@ def get_source(pad, path, alt=PRIMARY_ALT, page_num=None, persist=True):
     return paginated_source
 
 
-class PrecomputedQuery(Query):
+class PrecomputedQuery(Query):  # type: ignore[misc]
     """This is a Query which yields a pre-computed sequence of children.
 
     This is useful in (at least) two circumstances:
@@ -64,28 +85,41 @@ class PrecomputedQuery(Query):
 
     """
 
-    def __init__(self, path, pad, child_ids, alt=PRIMARY_ALT):
+    # Annotations for fields inherited from Query
+    _order_by: Sequence[str] | None
+    _page_num: int | None
+
+    def __init__(
+        self,
+        path: str,
+        pad: Pad,
+        child_ids: Iterable[str],
+        alt: str = PRIMARY_ALT,
+    ):
         super().__init__(path, pad, alt=alt)
         # We really just want an ordered set, but we'll use an OrderedDict
         # to avoid requiring another library.
         self.__child_ids = OrderedDict((id_, None) for id_ in child_ids)
         self.__assert_is_not_attachment_query()
 
-    def _get(self, id, persist=True, page_num=Ellipsis):
+    def _get(
+        self,
+        id: str,
+        persist: bool = True,
+        page_num: int | None | EllipsisType = Ellipsis,
+    ) -> Record | VirtualSourceObject:
         """Low level record access."""
         if id not in self.__child_ids:
             return None  # not in our query set
-        if page_num is Ellipsis:
-            page_num = self._page_num
         return get_source(
             self.pad,
             path=f"{self.path}/{id}",
-            page_num=page_num,
+            page_num=self._page_num if page_num is Ellipsis else page_num,
             alt=self.alt,
             persist=persist,
         )
 
-    def _iterate(self):
+    def _iterate(self) -> Generator[Record | VirtualSourceObject, None, None]:
         self.__assert_is_not_attachment_query()
         # note dependencies
         self_record = self.pad.get(self.path, alt=self.alt)
@@ -109,28 +143,31 @@ class PrecomputedQuery(Query):
             if is_page and self._matches(record):
                 yield record
 
-    def get_order_by(self):
+    def get_order_by(self) -> Sequence[str] | None:
         # child_ids are already in default order, so unless an ordering
         # is explicitly applied, we do not need to sort the results
         return self._order_by
 
-    def __assert_is_not_attachment_query(self):
+    def __assert_is_not_attachment_query(self) -> None:
         if not self._include_pages or self._include_attachments:
             raise AssertionError("Attachment queries are not currently supported")
 
-    def count(self):
+    def count(self) -> int:
         if self._pristine:
             # optimization
             return len(self.__child_ids)
-        return super().count()
+        return super().count()  # type: ignore[no-any-return]
 
-    def get(self, id, page_num=Ellipsis):
+    def get(
+        self, id: str, page_num: int | None | EllipsisType = Ellipsis
+    ) -> Record | VirtualSourceObject | None:
         # optimization
         if id in self.__child_ids:
             return self._get(id, page_num=page_num)
+        return None
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         if self._pristine:
             # optimization
             return len(self.__child_ids) > 0
-        return super().__bool__()
+        return super().__bool__()  # type: ignore[no-any-return]

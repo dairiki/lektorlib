@@ -3,6 +3,7 @@
 ### Release 1.1.1 (unreleased)
 
 - Use PDM instead of setuptools to build distribution
+- Added type annotations
 - Configured pre-commit
 - Run black and reorder-python-imports on the code
 
