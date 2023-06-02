@@ -14,7 +14,7 @@ def assert_no_dependencies(match=None):
             path = dep if isinstance(dep, str) else dep.path
             if not re.search(match, path):
                 return
-        assert False, "Unexpected dependency: %r" % dep
+        raise AssertionError(f"Unexpected dependency: {dep!r}")
 
     with get_ctx().gather_dependencies(check_dep):
         yield

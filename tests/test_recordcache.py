@@ -28,7 +28,7 @@ class Test_get_or_create_virtual:
             return virtual_source
         creator.calls = []
 
-        for n in range(2):
+        for _n in range(2):
             rv = get_or_create_virtual(record, 'virtual/path', creator)
             assert rv is virtual_source
         assert creator.calls == [()]
@@ -50,7 +50,7 @@ class Test_get_or_create_virtual:
             return None
         creator.calls = []
 
-        for n in range(2):
+        for _n in range(2):
             rv = get_or_create_virtual(record, 'virtual/path', creator)
             assert rv is None
         assert creator.calls == [()]
