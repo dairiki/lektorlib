@@ -1,6 +1,6 @@
 ## Changelog
 
-### Release 1.2.1 (unreleased)
+### Release 1.2.1 (2023-06-15)
 
 #### Type Annotations
 
