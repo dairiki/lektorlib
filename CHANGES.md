@@ -1,5 +1,9 @@
 ## Changelog
 
+### Next Release
+
+- Test under python 3.12
+
 ### Release 1.2.1 (2023-06-15)
 
 #### Type Annotations
