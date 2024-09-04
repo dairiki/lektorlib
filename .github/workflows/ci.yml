@@ -17,18 +17,19 @@ jobs:
         python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - run: python -m pip install --upgrade pip
     - run: pip install tox tox-gh-actions
     - run: tox
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: coverage-data
+        name: coverage-data-${{ matrix.python-version }}
         path: .coverage.*
+        include-hidden-files: true
         retention-days: 1
 
   coverage:
@@ -36,19 +37,21 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - run: python -m pip install --upgrade pip
     - run: pip install tox
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
-        name: coverage-data
+        pattern: coverage-data-*
+        merge-multiple: true
+
     - run: tox run -e cover-report
 
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/cache@v3
+    - uses: actions/checkout@v4
+    - uses: actions/cache@v4
       with:
         path: |
           ~/.cache/pre-commit
@@ -61,8 +64,8 @@ jobs:
   mypy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: pdm-project/setup-pdm@v3
+    - uses: actions/checkout@v4
+    - uses: pdm-project/setup-pdm@v4
     - run: pdm install
     - run: pdm run mypy
 
@@ -76,8 +79,8 @@ jobs:
       name: pypi
       url: https://pypi.org/p/lektorlib/
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: pdm-project/setup-pdm@v3
+      - uses: pdm-project/setup-pdm@v4
       - run: pdm publish
